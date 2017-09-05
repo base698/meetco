@@ -13,7 +13,7 @@ contract Meeting {
 	event MeetingRemoved();
 
 	function Meeting() {
-    roomInt = 1;
+    roomInt = 0;
 	}
 
 	struct Schedule {
@@ -51,9 +51,9 @@ contract Meeting {
   // }
 
   function createRoom(bytes32 room) payable costs(1 ether) {
+     roomInt += 1;
      rooms[roomInt] = room;
  		 MeetingCreated(roomInt);
-     roomInt += 1;
   }
 
   function removeRoom(uint id) {
@@ -67,12 +67,12 @@ contract Meeting {
   }
 
   function getRooms() constant returns (uint[], bytes32[]) {
-     var r = new bytes32[](roomInt + 1);
-     var ids = new uint[](roomInt + 1);
+     var r = new bytes32[](roomInt);
+     var ids = new uint[](roomInt);
 
-		 for(uint i=1; i <= roomInt; i++) {
-			  r[i] = rooms[i];
+		 for(uint i=0; i < roomInt; i++) {
         ids[i] = i;
+			  r[i] = rooms[i];
      }	
      return (ids, r);
   }

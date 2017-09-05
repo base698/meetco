@@ -1,63 +1,54 @@
-var MetaCoin = artifacts.require("./MetaCoin.sol");
+var Meeting = artifacts.require("./Meeting.sol");
 
-contract('MetaCoin', function(accounts) {
-  it("should put 10000 MetaCoin in the first account", function() {
-    return MetaCoin.deployed().then(function(instance) {
-      return instance.getBalance.call(accounts[0]);
-    }).then(function(balance) {
-      assert.equal(balance.valueOf(), 10000, "10000 wasn't in the first account");
+contract('Meeting', function(accounts) {
+  it("should do something", function() {
+    return Meeting.deployed().then(function(instance) {
+      return instance.getRooms.call();
+    }).then(function(rooms) {
+      assert.equal(rooms[1].length, 0, "rooms not empty");
     });
   });
-  it("should call a function that depends on a linked library", function() {
-    var meta;
-    var metaCoinBalance;
-    var metaCoinEthBalance;
+  it("should create a room", function() {
+    const expected = 'Test';
+    return Meeting.deployed().then(function(instance) {
+      return instance.createRoom('hiiii' ,{value:1});
+    }).then(function(rooms) {
+      console.log(rooms);
 
-    return MetaCoin.deployed().then(function(instance) {
-      meta = instance;
-      return meta.getBalance.call(accounts[0]);
-    }).then(function(outCoinBalance) {
-      metaCoinBalance = outCoinBalance.toNumber();
-      return meta.getBalanceInEth.call(accounts[0]);
-    }).then(function(outCoinBalanceEth) {
-      metaCoinEthBalance = outCoinBalanceEth.toNumber();
-    }).then(function() {
-      assert.equal(metaCoinEthBalance, 2 * metaCoinBalance, "Library function returned unexpected function, linkage may be broken");
+      // assert.equal(rooms[1].length, 0, "rooms not empty");
     });
-  });
-  it("should send coin correctly", function() {
-    var meta;
 
-    // Get initial balances of first and second account.
-    var account_one = accounts[0];
-    var account_two = accounts[1];
+/*    var meta;*/
 
-    var account_one_starting_balance;
-    var account_two_starting_balance;
-    var account_one_ending_balance;
-    var account_two_ending_balance;
+    //// Get initial balances of first and second account.
+    //var account_one = accounts[0];
+    //var account_two = accounts[1];
 
-    var amount = 10;
+    //var account_one_starting_balance;
+    //var account_two_starting_balance;
+    //var account_one_ending_balance;
+    //var account_two_ending_balance;
 
-    return MetaCoin.deployed().then(function(instance) {
-      meta = instance;
-      return meta.getBalance.call(account_one);
-    }).then(function(balance) {
-      account_one_starting_balance = balance.toNumber();
-      return meta.getBalance.call(account_two);
-    }).then(function(balance) {
-      account_two_starting_balance = balance.toNumber();
-      return meta.sendCoin(account_two, amount, {from: account_one});
-    }).then(function() {
-      return meta.getBalance.call(account_one);
-    }).then(function(balance) {
-      account_one_ending_balance = balance.toNumber();
-      return meta.getBalance.call(account_two);
-    }).then(function(balance) {
-      account_two_ending_balance = balance.toNumber();
+    //var amount = 10;
 
-      assert.equal(account_one_ending_balance, account_one_starting_balance - amount, "Amount wasn't correctly taken from the sender");
-      assert.equal(account_two_ending_balance, account_two_starting_balance + amount, "Amount wasn't correctly sent to the receiver");
+    //return MetaCoin.deployed().then(function(instance) {
+      //meta = instance;
+      //return meta.getBalance.call(account_one);
+    //}).then(function(balance) {
+      //account_one_starting_balance = balance.toNumber();
+      //return meta.getBalance.call(account_two);
+    //}).then(function(balance) {
+      //account_two_starting_balance = balance.toNumber();
+      //return meta.sendCoin(account_two, amount, {from: account_one});
+    //}).then(function() {
+      //return meta.getBalance.call(account_one);
+    //}).then(function(balance) {
+      //account_one_ending_balance = balance.toNumber();
+      //return meta.getBalance.call(account_two);
+    //}).then(function(balance) {
+      //account_two_ending_balance = balance.toNumber();
+
+      //assert.equal(account_one_ending_balance, account_one_starting_balance - amount, "Amount wasn't correctly taken from the sender");
+      //assert.equal(account_two_ending_balance, account_two_starting_balance + amount, "Amount wasn't correctly sent to the receiver");
     });
-  });
 });
