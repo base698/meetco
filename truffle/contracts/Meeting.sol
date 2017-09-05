@@ -14,6 +14,7 @@ contract Meeting {
 
 	function Meeting() {
     roomInt = 0;
+    owner = msg.sender;
 	}
 
 	struct Schedule {
